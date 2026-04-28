@@ -68,7 +68,7 @@
                         @csrf
 
                         <!-- Table -->
-                        <div class="overflow-x-auto rounded-xl" style="background: rgba(0, 0, 0, 0.2);">
+                        <div class="rounded-xl overflow-hidden" style="background: rgba(0, 0, 0, 0.2);">
                             <table class="modern-table">
                                 <thead>
                                     <tr>
@@ -105,6 +105,7 @@
                                                 Telephone
                                             </div>
                                         </th>
+                                        <th style="width: 100px; text-align: center;">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -130,6 +131,19 @@
                                                     {{ $user->telephone }}
                                                 </span>
                                             </td>
+                                            <td>
+                                                <div class="flex justify-center">
+                                                    <button type="button" onclick="deleteSingle({{ $user->id }})"
+                                                        class="btn-icon-danger" title="Delete record">
+                                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                                            stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -142,14 +156,22 @@
                             <div class="text-sm" style="color: rgba(255, 255, 255, 0.5);">
                                 <span id="selected-count">0</span> of {{ $users->count() }} selected
                             </div>
-                            <div class="flex gap-3">
+                            <div class="flex flex-wrap gap-3">
                                 <a href="{{ route('csv.index') }}" class="btn-secondary inline-flex items-center gap-2">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                     </svg>
-                                    Back to Upload
+                                    Back
                                 </a>
+                                <button type="button" onclick="deleteSelected()"
+                                    class="btn-danger inline-flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Delete Selected
+                                </button>
                                 <button type="submit" class="btn-success inline-flex items-center gap-2">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -159,6 +181,13 @@
                                 </button>
                             </div>
                         </div>
+                    </form>
+
+                    <!-- Hidden Delete Form -->
+                    <form id="delete-form" action="{{ route('csv.destroy') }}" method="POST" style="display: none;">
+                        @csrf
+                        @method('DELETE')
+                        <div id="delete-ids-container"></div>
                     </form>
                 @endif
             </div>
@@ -198,6 +227,37 @@
 
                 // Initial count
                 updateSelectedCount();
+
+                window.deleteSingle = function(id) {
+                    if (confirm('Are you sure you want to delete this record?')) {
+                        const form = document.getElementById('delete-form');
+                        const container = document.getElementById('delete-ids-container');
+                        container.innerHTML = `<input type="hidden" name="verified_ids[]" value="${id}">`;
+                        form.submit();
+                    }
+                }
+
+                window.deleteSelected = function() {
+                    const checkedIds = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.value);
+                    if (checkedIds.length === 0) {
+                        alert('Please select at least one record to delete.');
+                        return;
+                    }
+
+                    if (confirm(`Are you sure you want to delete ${checkedIds.length} selected record(s)?`)) {
+                        const form = document.getElementById('delete-form');
+                        const container = document.getElementById('delete-ids-container');
+                        container.innerHTML = '';
+                        checkedIds.forEach(id => {
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'verified_ids[]';
+                            input.value = id;
+                            container.appendChild(input);
+                        });
+                        form.submit();
+                    }
+                }
         </script>
     @endpush
 </x-app-layout>

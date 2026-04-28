@@ -66,4 +66,18 @@ class CsvImportController extends Controller
         $count = count($ids);
         return redirect()->route('csv.verify')->with('message', $count . ' ' . ($count === 1 ? 'record has' : 'records have') . ' been verified and saved');
     }
+
+    public function destroy(Request $request)
+    {
+        $ids = $request->input('verified_ids', []);
+
+        if (empty($ids)) {
+            return redirect()->route('csv.verify')->with('warning', 'Please select at least one record to delete.');
+        }
+
+        ImportedUser::whereIn('id', $ids)->delete();
+
+        $count = count($ids);
+        return redirect()->route('csv.verify')->with('message', $count . ' ' . ($count === 1 ? 'record has' : 'records have') . ' been deleted successfully');
+    }
 }

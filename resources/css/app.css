@@ -114,6 +114,44 @@ body {
     box-shadow: 0 8px 25px rgba(17, 153, 142, 0.5);
 }
 
+.btn-danger {
+    background: var(--gradient-secondary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(245, 87, 108, 0.5);
+}
+
+.btn-icon-danger {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    color: #f5576c;
+    background: rgba(245, 87, 108, 0.1);
+    border: 1px solid rgba(245, 87, 108, 0.2);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-icon-danger:hover {
+    background: #f5576c;
+    color: white;
+    transform: scale(1.1);
+}
+
 /* Custom File Input */
 .file-input-wrapper {
     position: relative;
