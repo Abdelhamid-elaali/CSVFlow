@@ -96,5 +96,5 @@ This project is open-source and licensed under the [MIT License](LICENSE).
 ---
 
 <p align="center">
-  Developed with ❤️ by the CSVFlow Team
+  Developed with LBOSS by the CSVFlow Team
 </p>
