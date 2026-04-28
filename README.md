@@ -91,7 +91,7 @@ CSVFlow follows modern design principles to ensure a premium feel:
 
 ## 📄 License
 
-This project is open-source and licensed under the [MIT License](LICENSE).
+This project is open-source and licensed under the [GPL-3.0 license](LICENSE).
 
 ---
 
